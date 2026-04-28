@@ -1,0 +1,68 @@
+Mainactivity
+
+package com.example.todo_kotlin
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var editText: EditText
+    private lateinit var button: Button
+    private lateinit var textView: TextView
+    private val tasks = mutableListOf<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        editText = findViewById(R.id.editTextTask)
+        button = findViewById(R.id.buttonAdd)
+        textView = findViewById(R.id.textViewTasks)
+
+        button.setOnClickListener {
+            val task = editText.text.toString().trim()
+            if (task.isNotEmpty()) {
+                tasks.add(task)
+                editText.text.clear()
+                updateTasks()
+            }
+        }
+    }
+
+    private fun updateTasks() {
+        textView.text = tasks.joinToString(separator = "\n")
+    }
+}
+
+activity_main.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter task" />
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Task"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewTasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tasks will appear here"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
+
