@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/main"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+
+
+   <TextView
+       android:id="@+id/textView4"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Calculator"
+       android:textAppearance="@style/TextAppearance.AppCompat.Large"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.139" />
+
+
+   <EditText
+       android:id="@+id/editTextNumber"
+       android:layout_width="378dp"
+       android:layout_height="84dp"
+       android:ems="10"
+       android:hint="Enter Number"
+       android:inputType="number"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.233" />
+
+
+   <EditText
+       android:id="@+id/editTextNumber2"
+       android:layout_width="384dp"
+       android:layout_height="82dp"
+       android:ems="10"
+       android:hint="Enter Number"
+       android:inputType="number"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.592"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.38" />
+
+
+   <Button
+       android:id="@+id/button"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="+"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.049"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.546" />
+
+
+   <Button
+       android:id="@+id/button3"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="-"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.356"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.546" />
+
+
+   <Button
+       android:id="@+id/button4"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="*"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.668"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.545" />
+
+
+   <Button
+       android:id="@+id/button2"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="/"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.965"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.544" />
+
+
+   <TextView
+       android:id="@+id/textView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:textSize="30sp"
+       app:layout_constraintHorizontal_bias="0.498"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.633" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+package com.example.cal_01;
+
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+public class MainActivity extends AppCompatActivity {
+
+
+   EditText num1, num2;
+   Button addBtn, subBtn, mulBtn, divBtn;
+   TextView resultView;
+
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+
+       // Link UI components
+       num1 = findViewById(R.id.editTextNumber);
+       num2 = findViewById(R.id.editTextNumber2);
+
+
+       addBtn = findViewById(R.id.button);
+       subBtn = findViewById(R.id.button3);
+       mulBtn = findViewById(R.id.button4);
+       divBtn = findViewById(R.id.button2);
+
+
+       resultView = findViewById(R.id.textView);
+
+
+       // ADDITION
+       addBtn.setOnClickListener(v -> calculate('+'));
+
+
+       // SUBTRACTION
+       subBtn.setOnClickListener(v -> calculate('-'));
+
+
+       // MULTIPLICATION
+       mulBtn.setOnClickListener(v -> calculate('*'));
+
+
+       // DIVISION
+       divBtn.setOnClickListener(v -> calculate('/'));
+   }
+
+
+   private void calculate(char operator) {
+
+
+       if (num1.getText().toString().isEmpty() || num2.getText().toString().isEmpty()) {
+           resultView.setText("Please enter both numbers");
+           return;
+       }
+
+
+       double a = Double.parseDouble(num1.getText().toString());
+       double b = Double.parseDouble(num2.getText().toString());
+       double result = 0;
+
+
+       switch (operator) {
+           case '+':
+               result = a + b;
+               break;
+
+
+           case '-':
+               result = a - b;
+               break;
+
+
+           case '*':
+               result = a * b;
+               break;
+
+
+           case '/':
+               if (b == 0) {
+                   resultView.setText("Cannot divide by zero");
+                   return;
+               }
+               result = a / b;
+               break;
+       }
+
+
+       resultView.setText("Result: " + result);
+   }
+}
