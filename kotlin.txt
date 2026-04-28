@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editText"
+        android:hint="Enter Task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/addBtn"
+        android:text="Add Task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
+
+
+MainActivity.kt
+
+package com.example.to_do
+
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var editText: EditText
+    private lateinit var addBtn: Button
+    private lateinit var listView: ListView
+    private val taskList = ArrayList<String>()
+    private lateinit var adapter: ArrayAdapter<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Initialize UI components
+        editText = findViewById(R.id.editText)
+        addBtn = findViewById(R.id.addBtn)
+        listView = findViewById(R.id.listView)
+
+        // Set up adapter
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, taskList)
+        listView.adapter = adapter
+
+        // Add task
+        addBtn.setOnClickListener {
+            val task = editText.text.toString().trim()
+            if (task.isNotEmpty()) {
+                taskList.add(task)
+                adapter.notifyDataSetChanged()
+                editText.text.clear()
+            } else {
+                Toast.makeText(this, "Enter a task", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Delete task on click
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val removedTask = taskList.removeAt(position)
+            adapter.notifyDataSetChanged()
+            Toast.makeText(this, "Deleted: $removedTask", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
