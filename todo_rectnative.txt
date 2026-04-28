@@ -1,0 +1,80 @@
+Design and develop a cross-platform application for To-Do (task) management.
+import React, { useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+
+
+export default function App() {
+
+
+  const [task, setTask] = useState('');
+  const [list, setList] = useState<string[]>([]);
+
+
+  const add = () => {
+    if (!task) return;
+    setList([...list, task]);
+    setTask('');
+  };
+
+
+  const del = (i:number) => {
+    setList(list.filter((_, x) => x !== i));
+  };
+
+
+  return (
+    <View style={styles.container}>
+
+
+      <Text style={styles.title}>To-Do App</Text>
+
+
+      <TextInput
+        placeholder="Enter task"
+        value={task}
+        onChangeText={setTask}
+        style={styles.input}
+      />
+
+
+      <Button title="Add Task" onPress={add} />
+
+
+      {list.map((t, i) => (
+        <Text key={i} style={styles.item} onPress={() => del(i)}>
+          {t}
+        </Text>
+      ))}
+
+
+    </View>
+  );
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#e6f7ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    fontWeight: 'bold'
+  },
+  input: {
+    borderWidth: 1,
+    width: 220,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: '#fff'
+  },
+  item: {
+    marginTop: 10,
+    fontSize: 18
+  }
+});
+
