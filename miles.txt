@@ -1,0 +1,104 @@
+Develop a cross-platform application to convert units:
+km ↔ miles
+kg ↔ pounds
+
+
+import React, { useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+
+
+export default function App() {
+
+
+  const [val, setVal] = useState('');
+  const [res, setRes] = useState('');
+
+
+  const kmToMiles = () => {
+    if (!val) return setRes("Enter value");
+    setRes((parseFloat(val) * 0.621).toFixed(2));
+  };
+
+
+  const milesToKm = () => {
+    if (!val) return setRes("Enter value");
+    setRes((parseFloat(val) / 0.621).toFixed(2));
+  };
+
+
+  const kgToPounds = () => {
+    if (!val) return setRes("Enter value");
+    setRes((parseFloat(val) * 2.2).toFixed(2));
+  };
+
+
+  const poundsToKg = () => {
+    if (!val) return setRes("Enter value");
+    setRes((parseFloat(val) / 2.2).toFixed(2));
+  };
+
+
+  return (
+    <View style={styles.container}>
+
+
+      <Text style={styles.title}>Unit Converter</Text>
+
+
+      <TextInput
+        placeholder="Enter value"
+        value={val}
+        onChangeText={setVal}
+        keyboardType="numeric"
+        style={styles.input}
+      />
+
+
+      <View style={styles.btn}>
+        <Button title="KM → Miles" onPress={kmToMiles} />
+        <Button title="Miles → KM" onPress={milesToKm} />
+        <Button title="KG → Pounds" onPress={kgToPounds} />
+        <Button title="Pounds → KG" onPress={poundsToKg} />
+      </View>
+
+
+      <Text style={styles.result}>Result: {res}</Text>
+
+
+    </View>
+  );
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#d0f0ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 20
+  },
+  input: {
+    borderWidth: 1,
+    width: 220,
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+    backgroundColor: '#fff'
+  },
+  btn: {
+    width: 220,
+    gap: 10
+  },
+  result: {
+    marginTop: 20,
+    fontSize: 20,
+    fontWeight: 'bold'
+  }
+});
+
