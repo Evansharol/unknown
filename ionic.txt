@@ -1,0 +1,117 @@
+Design and develop a simple Notes app / Recipe Book app using Ionic Framework with native plugins for Android/iOS.
+COMMANDS
+
+npm install -g @ionic/cli
+npm install @capacitor/preferences
+npx cap sync 
+
+Create: ionic start notesapp blank
+
+Run: ionic serve
+
+npm install -g @ionic/cli
+Creation
+ionic start notesapp blank
+ionic serve (runs in browser)
+
+
+To run in android 
+ionic build
+npx cap add android
+npx cap open android
+
+
+import {
+  IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
+  IonInput, IonButton, IonList, IonItem
+} from '@ionic/react';
+
+
+import { useState, useEffect } from 'react';
+import { Preferences } from '@capacitor/preferences';
+
+
+const Home: React.FC = () => {
+
+
+  const [note, setNote] = useState("");
+  const [notes, setNotes] = useState<string[]>([]);
+
+
+  // Add note
+  const add = async () => {
+    if (note === "") return;
+
+
+    const newList = [...notes, note];
+    setNotes(newList);
+    setNote("");
+
+
+    await Preferences.set({
+      key: 'notes',
+      value: JSON.stringify(newList)
+    });
+  };
+
+
+  // Delete note
+  const del = async (i: number) => {
+    const newList = notes.filter((_, x) => x !== i);
+    setNotes(newList);
+
+
+    await Preferences.set({
+      key: 'notes',
+      value: JSON.stringify(newList)
+    });
+  };
+
+
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Notes App</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+
+
+      <IonContent className="ion-padding">
+
+
+        <IonInput
+          value={note}
+          placeholder="Enter note"
+          onIonChange={e => setNote(e.detail.value!)}
+        />
+
+
+        <IonButton onClick={add}>
+          Add Note
+        </IonButton>
+
+
+        <IonList>
+          {notes.map((n, i) => (
+            <IonItem key={i}>
+              {n}
+              <IonButton color="danger" onClick={() => del(i)}>
+                Delete
+              </IonButton>
+            </IonItem>
+          ))}
+        </IonList>
+
+
+      </IonContent>
+    </IonPage>
+  );
+};
+
+
+export default Home;
+
+
+
+
