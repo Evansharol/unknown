@@ -1,0 +1,110 @@
+1. Check Flutter Installation
+ flutter --version 
+2. Create New Project
+ flutter create currency_app
+3. Go to Project Folder
+ cd currency_app 
+4. Open in VS Code code .
+ 5. Add HTTP Package (for API)
+ flutter pub add http 
+6. Run the App
+ flutter run
+
+import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+void main() {
+  runApp(MaterialApp(
+    home: MyApp(),
+  ));
+}
+
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+
+class _MyAppState extends State<MyApp> {
+
+
+  TextEditingController controller = TextEditingController();
+  String result = "0";
+
+
+  // Simple API function
+  void convert() async {
+
+
+    var response = await http.get(
+      Uri.parse("https://api.exchangerate-api.com/v4/latest/USD")
+    );
+
+
+    var data = jsonDecode(response.body);
+
+
+    double rate = data["rates"]["INR"];   // USD to INR
+    double usd = double.parse(controller.text);
+
+
+    double inr = usd * rate;
+
+
+    setState(() {
+      result = inr.toStringAsFixed(2);
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Currency Converter')),
+
+
+      body: Padding(
+        padding: EdgeInsets.all(20),
+
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
+
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Enter USD",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+
+            SizedBox(height: 20),
+
+
+            ElevatedButton(
+              onPressed: convert,
+              child: Text("Convert"),
+            ),
+
+
+            SizedBox(height: 20),
+
+
+            Text(
+              "INR: $result",
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
