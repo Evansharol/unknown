@@ -1,0 +1,255 @@
+DBHelpher.java
+
+
+package com.example.sqlite_02;
+
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+
+public class DBHelper extends SQLiteOpenHelper {
+
+
+   public DBHelper(Context context) {
+       super(context, "UserDB", null, 1);
+   }
+
+
+   @Override
+   public void onCreate(SQLiteDatabase db) {
+       db.execSQL("CREATE TABLE user(name TEXT PRIMARY KEY, location TEXT)");
+   }
+
+
+   @Override
+   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+       db.execSQL("DROP TABLE IF EXISTS user");
+       onCreate(db);
+   }
+
+
+   // INSERT DATA
+   public boolean insertData(String name, String location) {
+       SQLiteDatabase db = this.getWritableDatabase();
+       ContentValues cv = new ContentValues();
+       cv.put("name", name);
+       cv.put("location", location);
+
+
+       long result = db.insert("user", null, cv);
+       return result != -1;
+   }
+
+
+   // FETCH LOCATION USING NAME
+   public String getLocation(String name) {
+       SQLiteDatabase db = this.getReadableDatabase();
+       Cursor cursor = db.rawQuery("SELECT location FROM user WHERE name=?", new String[]{name});
+
+
+       if (cursor.moveToFirst()) {
+           return cursor.getString(0);
+       } else {
+           return "Not Found";
+       }
+   }
+}
+
+
+MainActivity.java
+
+
+package com.example.sqlite_02;
+
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import com.example.sqlite_02.DBHelper;
+import com.example.sqlite_02.R;
+
+
+public class MainActivity extends AppCompatActivity {
+
+
+   EditText nameInput, fetchNameInput, locationInput;
+   Button saveBtn, fetchBtn;
+   TextView result;
+
+
+   DBHelper db;
+
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+
+       // Link XML IDs
+       nameInput = findViewById(R.id.editTextText);     // Enter Name
+       locationInput = findViewById(R.id.editTextText2); // Enter Location
+       fetchNameInput = findViewById(R.id.editTextText3); // Type Name to Fetch
+
+
+       saveBtn = findViewById(R.id.button);
+       fetchBtn = findViewById(R.id.button2);
+
+
+       result = findViewById(R.id.textView);
+
+
+       db = new DBHelper(this);
+
+
+       // SAVE BUTTON
+       saveBtn.setOnClickListener(v -> {
+
+
+           String name = nameInput.getText().toString().trim();
+           String location = locationInput.getText().toString().trim();
+
+
+           if (name.isEmpty() || location.isEmpty()) {
+               result.setText("Enter Name and Location");
+               return;
+           }
+
+
+           boolean inserted = db.insertData(name, location);
+
+
+           if (inserted) {
+               result.setText("Data Saved Successfully");
+           } else {
+               result.setText("Name already exists");
+           }
+       });
+
+
+       // FETCH BUTTON
+       fetchBtn.setOnClickListener(v -> {
+
+
+           String name = fetchNameInput.getText().toString().trim();
+
+
+           if (name.isEmpty()) {
+               result.setText("Enter Name to Fetch");
+               return;
+           }
+
+
+           String location = db.getLocation(name);
+
+
+           result.setText("Location: " + location);
+       });
+   }
+}
+
+
+Activity_main.xml 
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/main"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity">
+
+
+   <EditText
+       android:id="@+id/editTextText"
+       android:layout_width="396dp"
+       android:layout_height="75dp"
+       android:ems="10"
+       android:hint="Enter your Name"
+       android:inputType="text"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.466"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.057" />
+
+
+   <EditText
+       android:id="@+id/editTextText3"
+       android:layout_width="396dp"
+       android:layout_height="75dp"
+       android:ems="10"
+       android:hint="Type Your Name"
+       android:inputType="text"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.466"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+
+   <EditText
+       android:id="@+id/editTextText2"
+       android:layout_width="396dp"
+       android:layout_height="75dp"
+       android:ems="10"
+       android:hint="Enter your Location"
+       android:inputType="text"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.466"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.222" />
+
+
+   <Button
+       android:id="@+id/button"
+       android:layout_width="190dp"
+       android:layout_height="66dp"
+       android:text="Save"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.497"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.366" />
+
+
+   <Button
+       android:id="@+id/button2"
+       android:layout_width="190dp"
+       android:layout_height="66dp"
+       android:text="Fetch"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.497"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.631" />
+
+
+   <TextView
+       android:id="@+id/textView"
+       android:layout_width="237dp"
+       android:layout_height="49dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       android:textAlignment="center"
+       app:layout_constraintVertical_bias="0.739" />
+</androidx.constraintlayout.widget.ConstraintLayout
