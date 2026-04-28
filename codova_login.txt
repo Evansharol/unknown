@@ -1,0 +1,164 @@
+
+npm install -g cordova
+cordova create hello com.example.hello myapp
+
+Go to the folder in C drive → Program file → user 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        padding:0;
+        margin:0;
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items: center;
+        background-color: rgb(190, 175, 175);
+        color:black;
+    }
+    .box{
+        width:450px;
+        padding:30px;
+        align-items: center;
+        border:1px solid rgb(255, 255, 255);
+        border-radius:10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        background-color: white;
+        text-align: center;
+    }
+    input{
+        width:80%;
+        padding:8px;
+        margin:10px 0;
+        border-radius:5px;
+        border:1px solid #ccc;
+    }
+    button{
+        padding:8px 15px;
+        margin:10px 5px;
+        border:none;
+        border-radius:5px;
+        background-color:#4CAF50;
+        color:white;
+        cursor:pointer;
+    }
+    button:hover{
+        background-color:#45a049;
+    }
+</style>
+<body>
+    <div class="box">
+    <h2>Login</h2>
+    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" style="width:100px; border-radius:50%;"><br>
+    username: <input type="text" id="username"><br>
+    password: <input type="password" id="password"><br>
+    <h3 id="result"></h3>
+    <button onclick="login()">Login</button>
+    <button onclick="reset()">Reset</button>
+    </div>
+</body>
+<script>
+    function login(){
+        let user = document.getElementById("username").value;
+        let pass = document.getElementById("password").value;
+        if(user === "admin" && pass === "1234"){
+            alert("Login successful!");
+        } else {
+            alert("Login failed!");
+    }
+    }
+    function reset(){
+        document.getElementById("username").value ="";
+        document.getElementById("password").value ="";
+        document.getElementById("result").innerText = "";
+
+
+    }
+</script>
+</html>
+
+OR
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login App</title>
+</head>
+
+<style>
+    body{
+        margin:0;
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background-color:#ccc;
+    }
+
+    .box{
+        width:300px;
+        padding:20px;
+        border-radius:10px;
+        background:white;
+        text-align:center;
+        box-shadow:0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    input{
+        width:90%;
+        padding:8px;
+        margin:10px;
+    }
+
+    button{
+        padding:8px 15px;
+        margin:5px;
+        background:green;
+        color:white;
+        border:none;
+    }
+</style>
+
+<body>
+
+<div class="box">
+    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="80"><br><br>
+    
+    <h2>User Login</h2>
+
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+
+    <button onclick="login()">Submit</button>
+    <button onclick="clearFields()">Reset</button>
+
+    <h3 id="result"></h3>
+</div>
+
+<script>
+function login(){
+    let u = document.getElementById("username").value;
+    let p = document.getElementById("password").value;
+
+    if(u=="admin" && p=="1234"){
+        document.getElementById("result").innerText="Login Successful";
+    } else {
+        document.getElementById("result").innerText="Invalid Login";
+    }
+}
+
+function clearFields(){
+    document.getElementById("username").value="";
+    document.getElementById("password").value="";
+    document.getElementById("result").innerText="";
+}
+</script>
+
+</body>
+</html>
