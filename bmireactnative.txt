@@ -1,0 +1,151 @@
+React Native, build a BMI Calculator application.
+
+
+npx create-expo-app BMIApp
+cd BMIApp
+
+
+Npm run web
+
+
+index.tsx
+
+import { useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+
+
+
+
+export default function HomeScreen() {
+
+
+
+
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+  const [bmi, setBmi] = useState('');
+  const [status, setStatus] = useState('');
+
+
+
+
+  const calculateBMI = () => {
+
+
+
+
+    if (!height || !weight) {
+      setBmi("Enter values");
+      return;
+    }
+
+
+
+
+    let h = parseFloat(height) / 100;
+    let w = parseFloat(weight);
+
+
+
+
+    let result = parseFloat((w / (h * h)).toFixed(2));
+
+
+
+
+    setBmi(result.toString());
+
+
+
+
+    if (result < 18.5) setStatus("Underweight");
+    else if (result < 25) setStatus("Normal");
+    else if (result < 30) setStatus("Overweight");
+    else setStatus("Obese");
+  };
+
+
+
+
+  return (
+    <View style={styles.container}>
+
+
+
+
+      <Text style={styles.title}>BMI Calculator</Text>
+
+
+
+
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Height (cm)"
+        keyboardType="numeric"
+        value={height}
+        onChangeText={setHeight}
+      />
+
+
+
+
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Weight (kg)"
+        keyboardType="numeric"
+        value={weight}
+        onChangeText={setWeight}
+      />
+
+
+
+
+      <Button title="Calculate BMI" onPress={calculateBMI} />
+
+
+
+
+      <Text style={styles.result}>BMI: {bmi}</Text>
+      <Text style={styles.result}>Status: {status}</Text>
+
+
+
+
+    </View>
+  );
+}
+
+
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 28,
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: 'bold',
+    color: '#fff'
+  },
+  input: {
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    color: '#000'
+  },
+  result: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 15,
+    color: '#fff'
+  }
+});
+
+
+
