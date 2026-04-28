@@ -1,0 +1,101 @@
+Build a cross-platform application for a simple expense manager:
+Enter daily income and expenses
+Display category-wise weekly summary
+
+
+import React, { useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+
+
+export default function App() {
+
+
+  const [amt, setAmt] = useState("");
+  const [cat, setCat] = useState("");
+  const [type, setType] = useState("");
+  const [list, setList] = useState<any[]>([]);
+
+
+  const add = () => {
+    if (!amt || !cat || !type) return;
+
+
+    setList([...list, { amt, cat, type }]);
+    setAmt('');
+    setCat('');
+    setType('');
+  };
+
+
+  return (
+    <View style={styles.container}>
+
+
+      <Text style={styles.title}>Expense Manager</Text>
+
+
+      <TextInput
+        placeholder="Amount"
+        onChangeText={setAmt}
+        value={amt}
+        style={styles.input}
+      />
+
+
+      <TextInput
+        placeholder="Category"
+        onChangeText={setCat}
+        value={cat}
+        style={styles.input}
+      />
+
+
+      <TextInput
+        placeholder="Type (income/expense)"
+        onChangeText={setType}
+        value={type}
+        style={styles.input}
+      />
+
+
+      <Button title="Add" onPress={add} />
+
+
+      {list.map((item, i) => (
+        <Text key={i} style={styles.item}>
+          {item.cat} - {item.type} : {item.amt}
+        </Text>
+      ))}
+
+
+    </View>
+  );
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    fontWeight: 'bold'
+  },
+  input: {
+    borderWidth: 1,
+    width: 200,
+    marginBottom: 10,
+    padding: 5,
+    backgroundColor: '#fff'
+  },
+  item: {
+    marginTop: 10,
+    fontSize: 16
+  }
+});
+
